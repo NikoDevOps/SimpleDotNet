@@ -11,7 +11,6 @@ RUN dotnet publish src/HelloEnv/HelloEnv.csproj \
     -o /app/publish \
     -p:SelfContained=false \
     -p:UseAppHost=false \
-    -p:PublishTrimmed=true \
     -p:InvariantGlobalization=true \
     -p:PublishReadyToRun=true
 
