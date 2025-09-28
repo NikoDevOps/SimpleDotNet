@@ -1,0 +1,7 @@
+1. Get the application URL by running these commands:
+  export RELEASE={{ .Release.Name }}
+  export NAMESPACE={{ .Release.Namespace }}
+
+  kubectl get svc $RELEASE-helloenv -n $NAMESPACE
+
+2. If Ingress is enabled, open the configured host(s).

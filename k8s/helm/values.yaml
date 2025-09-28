@@ -1,0 +1,107 @@
+image:
+  repository: ghcr.io/nikodevops/helloenv
+  tag: "latest"
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+replicaCount: 2
+
+serviceAccount:
+  create: false
+  name: ""
+  annotations: {}
+  automount: false
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 70
+
+pdb:
+  enabled: true
+  minAvailable: 1
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  className: "nginx"
+  annotations: {}
+  hosts:
+    - host: helloenv.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+  # - secretName: helloenv-tls
+  #   hosts:
+  #     - helloenv.example.com
+
+config:
+  GREETING: "World"
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    cpu: 250m
+    memory: 256Mi
+
+nodeSelector: {}
+
+affinity: {}
+
+tolerations: []
+
+podAnnotations: {}
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 10000
+  runAsGroup: 10000
+  fsGroup: 2000
+  seccompProfile:
+    type: RuntimeDefault
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop: ["ALL"]
+
+probes:
+  startup:
+    enabled: true
+    path: "/"
+    periodSeconds: 2
+    failureThreshold: 30
+  readiness:
+    path: "/"
+    periodSeconds: 5
+    timeoutSeconds: 2
+    failureThreshold: 3
+  liveness:
+    path: "/"
+    periodSeconds: 10
+    timeoutSeconds: 2
+    failureThreshold: 3
+
+extraEnv: []
+#  - name: SOME_VAR
+#    value: some-value
+
+extraEnvFrom: []
+#  - secretRef:
+#      name: my-secret
+
+extraVolumes:
+  - name: tmp
+    emptyDir: {}
+
+extraVolumeMounts:
+  - name: tmp
+    mountPath: /tmp
