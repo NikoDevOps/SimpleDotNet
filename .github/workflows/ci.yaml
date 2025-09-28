@@ -12,7 +12,7 @@ permissions:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository_owner }}/helloenv
+  IMAGE_NAME: helloenv
   DOTNET_VERSION: '9.0.x'
 
 jobs:
@@ -35,8 +35,7 @@ jobs:
         run: dotnet build src/HelloEnv/HelloEnv.csproj -c Release --no-restore
 
       - name: Test
-        run: |
-          echo "No tests yet"
+        run: echo "No tests yet"
 
       - name: Log in to GHCR
         uses: docker/login-action@v3
@@ -45,24 +44,28 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata (tags, labels)
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            # main
-            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
-            type=sha,prefix=sha-,enable=${{ github.ref == 'refs/heads/main' }}
+      - name: Get lowercase owner
+        run: echo "OWNER_LC=${GITHUB_REPOSITORY_OWNER,,}" >> $GITHUB_ENV
 
-            # dev
-            type=raw,value=dev,enable=${{ github.ref == 'refs/heads/dev' }}
-            type=sha,prefix=dev-,enable=${{ github.ref == 'refs/heads/dev' }}
+      - name: Get short commit SHA
+        run: echo "SHA_SHORT=$(git rev-parse --short=7 HEAD)" >> $GITHUB_ENV
 
-      - name: Build and push Docker image
+      - name: Build and push (main)
+        if: github.ref == 'refs/heads/main'
         uses: docker/build-push-action@v6
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.OWNER_LC }}/${{ env.IMAGE_NAME }}:latest
+            ${{ env.REGISTRY }}/${{ env.OWNER_LC }}/${{ env.IMAGE_NAME }}:${{ env.SHA_SHORT }}
+
+      - name: Build and push (dev)
+        if: github.ref == 'refs/heads/dev'
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.OWNER_LC }}/${{ env.IMAGE_NAME }}:dev
+            ${{ env.REGISTRY }}/${{ env.OWNER_LC }}/${{ env.IMAGE_NAME }}:${{ env.SHA_SHORT }}
