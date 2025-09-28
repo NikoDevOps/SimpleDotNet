@@ -3,7 +3,7 @@
 # Create namespace (if needed)
 kubectl create ns helloenv || true
 
-# Install chart from local folder ./helloenv
+# Install chart from local folder
 helm install helloenv . -n helloenv \
   --set image.repository=ghcr.io/nikodevops/helloenv \
   --set image.tag=dev \

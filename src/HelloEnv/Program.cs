@@ -8,6 +8,6 @@ var app = builder.Build();
 
 var greeting = Environment.GetEnvironmentVariable("GREETING") ?? "world";
 
-app.MapGet("/", () => Results.Text($"Hello, {greeting}!!!", "text/plain"));
+app.MapGet("/", () => Results.Text($"Hello, {greeting}!", "text/plain"));
 
 app.Run();
