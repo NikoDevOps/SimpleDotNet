@@ -1,0 +1,38 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: helloenv
+  labels:
+    app: helloenv
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: helloenv
+  template:
+    metadata:
+      labels:
+        app: helloenv
+    spec:
+      containers:
+      - name: helloenv
+        image: ghcr.io/nikodevops/helloenv:99772a4
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 8080
+        envFrom:
+          - configMapRef:
+              name: helloenv-config
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 20

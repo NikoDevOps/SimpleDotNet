@@ -1,0 +1,6 @@
+apiVersion: v2
+name: helloenv
+version: 0.1.0
+appVersion: "1.0.0"
+description: Minimal Helm chart for helloenv (.NET 9) app
+type: application
