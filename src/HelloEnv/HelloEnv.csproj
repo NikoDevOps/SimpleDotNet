@@ -7,5 +7,6 @@
     <InvariantGlobalization>true</InvariantGlobalization>
     <PublishReadyToRun>true</PublishReadyToRun>
     <PublishSingleFile>false</PublishSingleFile>
+    <SelfContained>false</SelfContained>
   </PropertyGroup>
 </Project>

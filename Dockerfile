@@ -9,6 +9,7 @@ COPY . .
 RUN dotnet publish src/HelloEnv/HelloEnv.csproj \
     -c Release \
     -o /app/publish \
+    -p:SelfContained=false \
     -p:UseAppHost=false \
     -p:PublishTrimmed=true \
     -p:InvariantGlobalization=true \
