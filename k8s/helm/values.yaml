@@ -30,6 +30,8 @@ ingress:
   enabled: false
   className: "nginx"
   annotations: {}
+  # cert-manager.io/cluster-issuer: letsencrypt
+  # external-dns.alpha.kubernetes.io/hostname: helloenv.example.com
   hosts:
     - host: helloenv.example.com
       paths:

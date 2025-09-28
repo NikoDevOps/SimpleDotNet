@@ -1,6 +1,6 @@
 # Quick start
 
-# create namespace (if needed)
+# Create namespace (if needed)
 kubectl create ns helloenv || true
 
 # Install chart from local folder ./helloenv
@@ -15,3 +15,9 @@ helm upgrade helloenv ./helloenv -n helloenv \
   --set ingress.hosts[0].host=helloenv.example.com \
   --set ingress.hosts[0].paths[0].path=/ \
   --set ingress.hosts[0].paths[0].pathType=Prefix
+
+# For upgrade chart
+helm upgrade helloenv . -n helloenv
+
+# For delete chart
+helm uninstall helloenv -n helloenv
