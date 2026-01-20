@@ -8,5 +8,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
       - name: Run warning demo script
         run: bash example-warnings.sh
+
+      - name: test
+        run: echo "### Hello world! :rocket:" >> $GITHUB_STEP_SUMMARY
+
