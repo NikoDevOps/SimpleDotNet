@@ -1,0 +1,27 @@
+name: CI with annotations and debug
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Print a debug message
+        run: |
+          echo "::debug::This is a debug message – only visible with ACTIONS_STEP_DEBUG"
+          echo "::notice::This is a notice message"
+          echo "::warning::This is a warning"
+          # Simulate an actual error so show annotation
+          if [ -f "nonexistent-file.txt" ]; then
+            echo "::error::File should exist but does not"
+          else
+            echo "::error file=ci.yml,line=1,title=Missing file::The expected file was missing"
+          fi
